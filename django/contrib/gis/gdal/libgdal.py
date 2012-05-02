@@ -8,17 +8,22 @@ from django.contrib.gis.gdal.error import OGRException
 try:
     from django.conf import settings
     lib_path = settings.GDAL_LIBRARY_PATH
+
 except (AttributeError, EnvironmentError, ImportError):
     lib_path = None
+
+if not lib_path and "GDAL_LIBRARY_PATH" in os.environ.keys():
+    lib_path = os.environ["GDAL_LIBRARY_PATH"]
+
 
 if lib_path:
     lib_names = None
 elif os.name == 'nt':
     # Windows NT shared libraries
-    lib_names = ['gdal18', 'gdal17', 'gdal16', 'gdal15']
+    lib_names = ['gdal19', 'gdal18', 'gdal17', 'gdal16', 'gdal15']
 elif os.name == 'posix':
     # *NIX library names.
-    lib_names = ['gdal', 'GDAL', 'gdal1.8.0', 'gdal1.7.0', 'gdal1.6.0', 'gdal1.5.0', 'gdal1.4.0']
+    lib_names = ['gdal', 'GDAL', 'gdal1.9.0', 'gdal1.8.0', 'gdal1.7.0', 'gdal1.6.0', 'gdal1.5.0', 'gdal1.4.0']
 else:
     raise OGRException('Unsupported OS "%s"' % os.name)
 
